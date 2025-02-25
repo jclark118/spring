@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting</title>
+    <script>
+        async function fetchGreetings() {
+            const names = document.getElementById("names").value.trim();
+            const nameArray = names.split(',').map(name => name.trim());
+            
+            const queryParams = nameArray.map(name => `names=${name}`).join('&');
+            const response = await fetch(`/greeting?${queryParams}`);
+            const data = await response.json();
+            
+            document.getElementById("greetingMessages").innerHTML = "";
+
+            data.forEach((row, index) => {
+                const rowElement = document.createElement("div");
+                const rowNames = document.createElement("p");
+                rowNames.textContent = row.join(', ');
+                rowElement.appendChild(rowNames);
+                document.getElementById("greetingMessages").appendChild(rowElement);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Enter 10 names (comma separated):</h2>
+    <h3>Given a list of names, randomly sort the list and generate a 10x10 grid</h3>
+    <input type="text" id="names" placeholder="Enter names" />
+    <button onclick="fetchGreetings()">Get Names</button>
+
+    <div id="greetingMessages"></div>
+</body>
+</html>
